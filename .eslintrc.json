@@ -1,0 +1,10 @@
+{
+  "extends": "@rocketseat/eslint-config/react",
+  "rules": {
+    "camelcase": 0,
+    "no-redeclare": 0,
+    "jsx-a11y/alt-text": 0,
+    "no-unused-vars": 0,
+    "no-useless-return": 0
+  }
+}
