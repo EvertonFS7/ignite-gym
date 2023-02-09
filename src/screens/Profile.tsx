@@ -100,6 +100,7 @@ export function Profile() {
               fontSize="md"
               mb={2}
               alignSelf="baseline"
+              fontFamily="heading"
               mt={12}
             >
               Alterar senha
