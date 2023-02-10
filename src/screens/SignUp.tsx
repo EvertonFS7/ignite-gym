@@ -9,12 +9,14 @@ import {
   Image,
   KeyboardAvoidingView,
   Text,
+  Toast,
   VStack,
 } from 'native-base'
 import { Controller, useForm } from 'react-hook-form'
 import { Platform, ScrollView } from 'react-native'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { api } from '@services/api'
 
 type FormDataProps = {
   name: string
@@ -51,9 +53,15 @@ export function SignUp() {
     goBack()
   }
 
-  function handleSignUp(data: FormDataProps) {
-    console.log(data)
+  async function handleSignUp({ name, email, password }: FormDataProps) {
+    try {
+      const response = await api.post('/users', { name, email, password })
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
