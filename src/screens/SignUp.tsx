@@ -2,6 +2,7 @@ import LogoSvg from '@assets/logo.svg'
 import { Button } from '@components/Button'
 import { Input } from '@components/Input'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useAuth } from '@hooks/useAuth'
 import { useNavigation } from '@react-navigation/native'
 import { api } from '@services/api'
 import { AppError } from '@utils/AppError'
@@ -15,6 +16,7 @@ import {
   useToast,
   VStack,
 } from 'native-base'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Platform, ScrollView } from 'react-native'
 import * as yup from 'yup'
@@ -49,6 +51,10 @@ export function SignUp() {
     resolver: yupResolver(signUpSchema),
   })
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { signIn } = useAuth()
+
   const { show } = useToast()
 
   const { goBack } = useNavigation()
@@ -59,12 +65,16 @@ export function SignUp() {
 
   async function handleSignUp({ name, email, password }: FormDataProps) {
     try {
-      const response = await api.post('/users', {
+      setIsLoading(true)
+      await api.post('/users', {
         name,
         email,
         password,
       })
+      await signIn(email, password)
     } catch (error) {
+      setIsLoading(false)
+
       const isAppError = error instanceof AppError
 
       const title = isAppError
@@ -165,6 +175,7 @@ export function SignUp() {
             <Button
               title="Criar e acessar"
               onPress={handleSubmit(handleSignUp)}
+              isLoading={isLoading}
             />
           </Center>
 
